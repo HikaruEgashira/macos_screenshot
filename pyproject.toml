@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "macos-screenshot"
+version = "0.1.0"
+description = "macOS application screenshot utility"
+requires-python = ">=3.11"
+dependencies = [
+    "pyobjc-core",
+    "pyobjc-framework-Cocoa",
+    "pyobjc-framework-Quartz",
+    "Pillow",
+    "numpy",
+    "setuptools>=75.8.0",
+    "ruff>=0.9.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["macos_screenshot"]
+include = ["stubs/**/*.pyi", "py.typed"]

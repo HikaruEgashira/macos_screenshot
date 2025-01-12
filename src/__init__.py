@@ -1,0 +1,3 @@
+"""
+macOS application screenshot utility
+"""
