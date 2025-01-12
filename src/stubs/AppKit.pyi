@@ -2,6 +2,7 @@ from typing import List, Protocol, overload
 
 class NSRunningApplication:
     def localizedName(self) -> str: ...
+    def bundleIdentifier(self) -> str: ...
 
 class NSWorkspaceProtocol(Protocol):
     @overload

@@ -24,6 +24,13 @@ def get_window_bounds(
     Returns:
         List[WindowBounds]: ウィンドウの範囲情報のリスト
     """
+    # アプリケーションのフィルタリングチェック
+    bundle_id = app.bundleIdentifier
+    if config.filter_mode == "whitelist" and bundle_id not in config.allowed_apps:
+        return []
+    if config.filter_mode == "blacklist" and bundle_id in config.blocked_apps:
+        return []
+
     options = kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements
     windows: List[Dict[str, Any]] = CGWindowListCopyWindowInfo(options, kCGNullWindowID)
     app_windows: List[WindowBounds] = []

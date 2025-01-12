@@ -17,10 +17,18 @@ def process_application(app: NSRunningApplication, config: ScreenshotConfig) -> 
         config (ScreenshotConfig): スクリーンショットの設定
     """
     try:
-        # アプリケーション名を取得
         app_name = app.localizedName()
+        bundle_id = app.bundleIdentifier()
         if not app_name:
             return
+
+        # フィルタリング状態をログ出力
+        if config.filter_mode == "whitelist":
+            if bundle_id not in config.allowed_apps:
+                return
+        elif config.filter_mode == "blacklist":
+            if bundle_id in config.blocked_apps:
+                return
 
         # ウィンドウ情報を取得
         windows = get_window_bounds(app, config)
@@ -52,6 +60,13 @@ def main() -> None:
             os.path.dirname(os.path.abspath(__file__)), "screenshots"
         ),
         exclude_menu_bar_apps=True,
+        filter_mode="blacklist",  # ブラックリストモードを使用
+        blocked_apps=[
+            "com.apple.mail",  # Mail
+            "com.apple.Safari",  # Safari
+            "com.microsoft.VSCode",  # Visual Studio Code
+            "com.google.Chrome",  # Chrome
+        ],
     )
 
     # 実行中のアプリケーションを取得
