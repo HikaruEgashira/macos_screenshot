@@ -1,11 +1,11 @@
-from .schema import ScreenshotConfig
+from .schema import WindowCaptureConfig
 from .window_info import get_window_bounds
-from .capture import capture_screenshot
-from .save_image import save_screenshot
+from .capture import capture_window
+from .save_image import save_window
 
 __all__ = [
-    "ScreenshotConfig",
+    "WindowCaptureConfig",
     "get_window_bounds",
-    "capture_screenshot",
-    "save_screenshot",
+    "capture_window",
+    "save_window",
 ]

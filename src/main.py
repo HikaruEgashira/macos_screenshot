@@ -5,19 +5,19 @@ from .app_list import get_running_apps
 from .stubs.AppKit import NSRunningApplication
 from .window_capture import (
     get_window_bounds,
-    capture_screenshot,
-    save_screenshot,
-    ScreenshotConfig,
+    capture_window,
+    save_window,
+    WindowCaptureConfig,
 )
 
 
-def process_application(app: NSRunningApplication, config: ScreenshotConfig) -> None:
+def process_application(app: NSRunningApplication, config: WindowCaptureConfig) -> None:
     """
-    アプリケーションのスクリーンショットを処理する。
+    アプリケーションのウィンドウをキャプチャする。
 
     Args:
         app (NSRunningApplication): アプリケーション
-        config (ScreenshotConfig): スクリーンショットの設定
+        config (WindowCaptureConfig): ウィンドウキャプチャの設定
     """
     try:
         app_name = app.localizedName()
@@ -36,14 +36,14 @@ def process_application(app: NSRunningApplication, config: ScreenshotConfig) -> 
         # ウィンドウ情報を取得
         windows = get_window_bounds(app, config)
 
-        # 各ウィンドウのスクリーンショットを取得
+        # 各ウィンドウをキャプチャ
         for i, window in enumerate(windows):
             try:
-                # スクリーンショットを取得
-                image = capture_screenshot(window)
+                # ウィンドウをキャプチャ
+                image = capture_window(window)
                 if image:
-                    # スクリーンショットを保存
-                    save_screenshot(image, f"{app_name}_{i}", config)
+                    # ウィンドウキャプチャを保存
+                    save_window(image, f"{app_name}_{i}", config)
                     print(f"Captured: {app_name} (Window {i + 1})")
             except Exception as e:
                 print(f"Error capturing window {i + 1} of {app_name}: {str(e)}")
@@ -54,13 +54,13 @@ def process_application(app: NSRunningApplication, config: ScreenshotConfig) -> 
 def main() -> None:
     """
     メイン関数
-    実行中の全アプリケーションのスクリーンショットを取得し保存する
+    実行中の全アプリケーションのウィンドウをキャプチャし保存する
     """
     # プロジェクトのルートディレクトリを取得
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    # スクリーンショットの設定
-    config = ScreenshotConfig(
+    # ウィンドウキャプチャの設定
+    config = WindowCaptureConfig(
         file_format="png",
         save_dir=os.path.join(root_dir, "out", "screenshots"),
         exclude_menu_bar_apps=True,

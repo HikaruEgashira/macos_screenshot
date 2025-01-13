@@ -8,18 +8,18 @@ from ..stubs.Quartz import (
     kCGWindowBounds,
 )
 from ..stubs.AppKit import NSRunningApplication
-from .schema import WindowBounds, ScreenshotConfig
+from .schema import WindowBounds, WindowCaptureConfig
 
 
 def get_window_bounds(
-    app: NSRunningApplication, config: ScreenshotConfig
+    app: NSRunningApplication, config: WindowCaptureConfig
 ) -> List[WindowBounds]:
     """
     アプリケーションのウィンドウ情報を取得し、ウィンドウの範囲情報を返す。
 
     Args:
         app (NSRunningApplication): アプリケーション
-        config (ScreenshotConfig): スクリーンショット設定
+        config (WindowCaptureConfig): ウィンドウキャプチャ設定
 
     Returns:
         List[WindowBounds]: ウィンドウの範囲情報のリスト

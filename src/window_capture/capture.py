@@ -9,21 +9,21 @@ from ..stubs.Quartz import (
 from .schema import WindowBounds
 
 
-def capture_screenshot(bounds: WindowBounds) -> CGImageRef:
+def capture_window(bounds: WindowBounds) -> CGImageRef:
     """
-    指定された範囲のスクリーンショットを取得する。
+    指定された範囲のウィンドウをキャプチャする。
 
     Args:
         bounds (WindowBounds): ウィンドウの範囲情報
 
     Returns:
-        CGImageRef: スクリーンショット
+        CGImageRef: ウィンドウキャプチャ
     """
     region = CGRectMake(bounds.x, bounds.y, bounds.width, bounds.height)
 
     options = kCGWindowListOptionOnScreenOnly
-    screenshot = CGWindowListCreateImage(
+    window_capture = CGWindowListCreateImage(
         region, options, kCGNullWindowID, kCGWindowImageDefault
     )
 
-    return screenshot
+    return window_capture

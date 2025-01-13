@@ -15,8 +15,8 @@ class WindowBounds:
 
 
 @dataclass
-class ScreenshotConfig:
-    """スクリーンショットの設定を表すデータクラス"""
+class WindowCaptureConfig:
+    """ウィンドウキャプチャの設定を表すデータクラス"""
 
     file_format: str = "png"
     save_dir: str = "./screenshots"
@@ -43,4 +43,4 @@ class ApplicationWindow:
     app: NSRunningApplication
     bounds: List[WindowBounds]
     name: str
-    screenshot: Optional[CGImageRef] = None
+    window_capture: Optional[CGImageRef] = None

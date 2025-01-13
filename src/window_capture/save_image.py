@@ -9,19 +9,21 @@ from ..stubs.Quartz import (
     CGImageGetDataProvider,
     CGDataProviderCopyData,
 )
-from .schema import ScreenshotConfig
+from .schema import WindowCaptureConfig
 
 
-def save_screenshot(
-    image: CGImageRef, app_name: str, config: ScreenshotConfig = ScreenshotConfig()
+def save_window(
+    image: CGImageRef,
+    app_name: str,
+    config: WindowCaptureConfig = WindowCaptureConfig(),
 ) -> None:
     """
-    スクリーンショットを指定された形式で保存する。
+    ウィンドウキャプチャを指定された形式で保存する。
 
     Args:
-        image (CGImageRef): スクリーンショット
+        image (CGImageRef): ウィンドウキャプチャ
         app_name (str): アプリケーション名
-        config (ScreenshotConfig): スクリーンショットの設定
+        config (WindowCaptureConfig): ウィンドウキャプチャの設定
     """
     # 保存先ディレクトリが存在しない場合は作成
     os.makedirs(config.save_dir, exist_ok=True)
