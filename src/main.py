@@ -1,11 +1,14 @@
 import os
 from typing import List
-from .stubs.AppKit import NSRunningApplication
+
 from .app_list import get_running_apps
-from .window_info import get_window_bounds
-from .screenshot import capture_screenshot
-from .save_image import save_screenshot
-from .models import ScreenshotConfig
+from .stubs.AppKit import NSRunningApplication
+from .window_capture import (
+    get_window_bounds,
+    capture_screenshot,
+    save_screenshot,
+    ScreenshotConfig,
+)
 
 
 def process_application(app: NSRunningApplication, config: ScreenshotConfig) -> None:
@@ -53,12 +56,13 @@ def main() -> None:
     メイン関数
     実行中の全アプリケーションのスクリーンショットを取得し保存する
     """
+    # プロジェクトのルートディレクトリを取得
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
     # スクリーンショットの設定
     config = ScreenshotConfig(
         file_format="png",
-        save_dir=os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "screenshots"
-        ),
+        save_dir=os.path.join(root_dir, "out", "screenshots"),
         exclude_menu_bar_apps=True,
         filter_mode="blacklist",  # ブラックリストモードを使用
         blocked_apps=[

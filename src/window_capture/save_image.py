@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 import numpy as np
-from .stubs.Quartz import (
+from ..stubs.Quartz import (
     CGImageRef,
     CGImageGetWidth,
     CGImageGetHeight,
@@ -9,7 +9,7 @@ from .stubs.Quartz import (
     CGImageGetDataProvider,
     CGDataProviderCopyData,
 )
-from .models import ScreenshotConfig
+from .schema import ScreenshotConfig
 
 
 def save_screenshot(

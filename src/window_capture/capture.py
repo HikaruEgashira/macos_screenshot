@@ -1,4 +1,4 @@
-from .stubs.Quartz import (
+from ..stubs.Quartz import (
     CGRectMake,
     CGWindowListCreateImage,
     kCGWindowListOptionOnScreenOnly,
@@ -6,7 +6,7 @@ from .stubs.Quartz import (
     kCGWindowImageDefault,
     CGImageRef,
 )
-from .models import WindowBounds
+from .schema import WindowBounds
 
 
 def capture_screenshot(bounds: WindowBounds) -> CGImageRef:

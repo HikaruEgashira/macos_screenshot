@@ -1,5 +1,5 @@
 from typing import List, Dict, Any
-from .stubs.Quartz import (
+from ..stubs.Quartz import (
     CGWindowListCopyWindowInfo,
     kCGWindowListOptionOnScreenOnly,
     kCGWindowListExcludeDesktopElements,
@@ -7,8 +7,8 @@ from .stubs.Quartz import (
     kCGWindowOwnerName,
     kCGWindowBounds,
 )
-from .stubs.AppKit import NSRunningApplication
-from .models import WindowBounds, ScreenshotConfig
+from ..stubs.AppKit import NSRunningApplication
+from .schema import WindowBounds, ScreenshotConfig
 
 
 def get_window_bounds(

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
-from .stubs.AppKit import NSRunningApplication
-from .stubs.Quartz import CGImageRef
+from ..stubs.AppKit import NSRunningApplication
+from ..stubs.Quartz import CGImageRef
 
 
 @dataclass

@@ -1,3 +1,3 @@
 """
-macOS application screenshot utility
+macOS application utility
 """
