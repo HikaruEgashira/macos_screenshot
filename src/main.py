@@ -1,4 +1,5 @@
 import os
+import logging
 from typing import List
 
 from .app_list import get_running_apps
@@ -9,6 +10,12 @@ from .window_capture import (
     save_window,
     WindowCaptureConfig,
 )
+
+logging.basicConfig(
+    level=os.environ.get("LOGLEVEL", "INFO"),
+    format="%(asctime)s - %(name)s - [%(levelname)s] %(message)s",
+)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 def process_application(app: NSRunningApplication, config: WindowCaptureConfig) -> None:
@@ -28,13 +35,22 @@ def process_application(app: NSRunningApplication, config: WindowCaptureConfig) 
         # フィルタリング状態をログ出力
         if config.filter_mode == "whitelist":
             if bundle_id not in config.allowed_apps:
+                logger.debug(
+                    f"Skipping {app_name} (Bundle ID: {bundle_id}) - not in whitelist"
+                )
                 return
         elif config.filter_mode == "blacklist":
             if bundle_id in config.blocked_apps:
+                logger.debug(
+                    f"Skipping {app_name} (Bundle ID: {bundle_id}) - in blacklist"
+                )
                 return
 
         # ウィンドウ情報を取得
         windows = get_window_bounds(app, config)
+        logger.debug(
+            f"Found {len(windows)} windows for {app_name} (Bundle ID: {bundle_id})"
+        )
 
         # 各ウィンドウをキャプチャ
         for i, window in enumerate(windows):
@@ -44,11 +60,17 @@ def process_application(app: NSRunningApplication, config: WindowCaptureConfig) 
                 if image:
                     # ウィンドウキャプチャを保存
                     save_window(image, f"{app_name}_{i}", config)
-                    print(f"Captured: {app_name} (Window {i + 1})")
+                    logger.info(f"Captured: {app_name} (Window {i + 1})")
+                    logger.debug(
+                        f"Detail: Bundle ID: {bundle_id}, Window bounds: {window}"
+                    )
             except Exception as e:
-                print(f"Error capturing window {i + 1} of {app_name}: {str(e)}")
+                logger.error(
+                    f"Error capturing window {i + 1} of {app_name}: {str(e)}",
+                    exc_info=True,
+                )
     except Exception as e:
-        print(f"Error processing {app.localizedName()}: {str(e)}")
+        logger.error(f"Error processing {app.localizedName()}: {str(e)}", exc_info=True)
 
 
 def main() -> None:
@@ -73,12 +95,18 @@ def main() -> None:
         ],
     )
 
+    logger.info("Starting window capture process")
+    logger.debug(f"Configuration: {config}")
+
     # 実行中のアプリケーションを取得
     apps: List[NSRunningApplication] = get_running_apps()
+    logger.debug(f"Found {len(apps)} running applications")
 
     # 各アプリケーションを処理
     for app in apps:
         process_application(app, config)
+
+    logger.info("Window capture process completed")
 
 
 if __name__ == "__main__":
