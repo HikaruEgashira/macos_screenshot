@@ -2,7 +2,7 @@ import os
 import logging
 from typing import List
 
-from .app_list import get_running_apps
+from .utils.app_list import get_running_apps
 from .stubs.AppKit import NSRunningApplication
 from .window_capture import (
     get_window_bounds,

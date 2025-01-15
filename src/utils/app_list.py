@@ -1,5 +1,5 @@
 from typing import List, Optional
-from .stubs.AppKit import NSWorkspace, NSRunningApplication
+from ..stubs.AppKit import NSWorkspace, NSRunningApplication
 
 
 def get_running_apps(
