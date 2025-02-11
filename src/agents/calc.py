@@ -14,31 +14,32 @@ from pydantic import SecretStr
 from mlx_use.controller.service import Controller
 
 
-def set_llm(llm_provider: str = None):
-    if not llm_provider:
-        raise ValueError("No llm provider was set")
+def set_llm(llm_provider: str, model: str):
+    match llm_provider:
+        case "OAI":
+            api_key = os.getenv("OPENAI_API_KEY")
+            return ChatOpenAI(model=model, api_key=SecretStr(api_key))
+        case "google":
+            api_key = os.getenv("GEMINI_API_KEY")
+            return ChatGoogleGenerativeAI(
+                model=model, api_key=SecretStr(api_key)
+            )
+        case "anthropic":
+            api_key = os.getenv("ANTHROPIC_API_KEY")
+            return ChatAnthropic(
+                model_name=model, api_key=SecretStr(api_key)
+            )
 
-    if llm_provider == "OAI":
-        api_key = os.getenv("OPENAI_API_KEY")
-        return ChatOpenAI(model="gpt-4o", api_key=SecretStr(api_key))
-
-    if llm_provider == "google":
-        api_key = os.getenv("GEMINI_API_KEY")
-        return ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash-exp", api_key=SecretStr(api_key)
-        )
-
-    if llm_provider == "anthropic":
-        api_key = os.getenv("ANTHROPIC_API_KEY")
-        return ChatAnthropic(
-            model_name="claude-3-5-sonnet-20241022", api_key=SecretStr(api_key)
-        )
-
-
-# llm = set_llm("google")
-# llm = set_llm("OAI")
-llm = set_llm("anthropic")
-
+# Available models:
+# google:
+#   - gemini-2.0-flash-exp
+# OAI:
+#   - gpt-4o
+#   - gpt-4o-mini
+# anthropic:
+#   - claude-3-5-haiku-20241022
+#   - claude-3-5-sonnet-20241022
+llm = set_llm("anthropic", "claude-3-5-sonnet-20241022")
 
 controller = Controller()
 
@@ -48,7 +49,7 @@ agent = Agent(
     task=task,
     llm=llm,
     controller=controller,
-    use_vision=False,
+    use_vision=True,
     max_actions_per_step=1,
 )
 
