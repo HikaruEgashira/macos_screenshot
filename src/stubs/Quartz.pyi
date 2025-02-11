@@ -1,4 +1,30 @@
-from typing import Any, Dict, List
+"""
+Quartz framework bindings for type checking
+"""
+
+from typing import Any, Dict, List, Tuple, Protocol
+from typing_extensions import Buffer
+
+class CGImage:
+    """CGImage representation"""
+
+    pass
+
+class CGDataProvider:
+    """CGDataProvider representation"""
+
+    pass
+
+class CFData(Buffer):
+    """CFData representation with buffer protocol support"""
+    def __bytes__(self) -> bytes: ...
+    def __len__(self) -> int: ...
+    def __getitem__(self, key: int) -> int: ...
+
+CGImageRef = CGImage
+CGDataProviderRef = CGDataProvider
+CFDataRef = CFData
+CGRect = Tuple[float, float, float, float]
 
 # Constants
 kCGWindowListOptionOnScreenOnly: int
@@ -8,31 +34,16 @@ kCGWindowImageDefault: int
 kCGWindowOwnerName: str
 kCGWindowBounds: str
 
-# Types
-CGDirectDisplayID = int
-CGWindowID = int
-CGImageRef = Any  # CoreGraphicsの複雑な型を簡略化
-
-# Window Functions
+# Functions
 def CGWindowListCopyWindowInfo(
-    option: int, relativeToWindow: CGWindowID
+    option: int, relativeToWindow: int
 ) -> List[Dict[str, Any]]: ...
 def CGWindowListCreateImage(
-    rect: Any,  # CGRect
-    listOption: int,
-    windowID: CGWindowID,
-    imageOption: int,
+    rect: CGRect, listOption: int, windowID: int, imageOption: int
 ) -> CGImageRef: ...
-
-# Geometry
-def CGRectMake(x: float, y: float, width: float, height: float) -> Any: ...  # CGRect
-
-# Image Functions
+def CGRectMake(x: float, y: float, width: float, height: float) -> CGRect: ...
 def CGImageGetWidth(image: CGImageRef) -> int: ...
 def CGImageGetHeight(image: CGImageRef) -> int: ...
-def CGImageGetBitsPerComponent(image: CGImageRef) -> int: ...
 def CGImageGetBytesPerRow(image: CGImageRef) -> int: ...
-def CGImageGetDataProvider(image: CGImageRef) -> Any: ...  # CGDataProviderRef
-
-# Data Provider Functions
-def CGDataProviderCopyData(provider: Any) -> bytes: ...
+def CGImageGetDataProvider(image: CGImageRef) -> CGDataProviderRef: ...
+def CGDataProviderCopyData(provider: CGDataProviderRef) -> CFDataRef: ...

@@ -1,17 +1,21 @@
-from typing import List, Protocol, overload
+"""
+AppKit framework bindings for type checking
+"""
+
+from typing import List, Optional
 
 class NSRunningApplication:
+    def processIdentifier(self) -> int: ...
     def localizedName(self) -> str: ...
     def bundleIdentifier(self) -> str: ...
 
-class NSWorkspaceProtocol(Protocol):
-    @overload
-    def runningApplications(self) -> List[NSRunningApplication]: ...
-    @overload
-    def runningApplications(
-        self, withBundleIdentifier: str
-    ) -> List[NSRunningApplication]: ...
-
 class NSWorkspace:
     @staticmethod
-    def sharedWorkspace() -> NSWorkspaceProtocol: ...
+    def sharedWorkspace() -> "NSWorkspace": ...
+    def runningApplications(
+        self, withBundleIdentifier: Optional[str] = None
+    ) -> List[NSRunningApplication]: ...
+
+# Export the types for use in other modules
+NSWorkspace = NSWorkspace
+NSRunningApplication = NSRunningApplication
